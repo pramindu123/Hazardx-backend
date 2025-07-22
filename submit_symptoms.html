@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 350px;
+        }
+
+            .form-card h2 {
+                margin-bottom: 20px;
+                color: #2c3e50;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #2980b9;
+            }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <h2>Symptom Details</h2>
+        <div class="form-group">
+            <label for="report_id">Report ID:</label>
+            <input type="number" id="report_id" required />
+        </div>
+        <div class="form-group">
+            <label for="reportername">Name:</label>
+            <input type="text" id="name" required />
+        </div>
+        <div class="form-group">
+            <label for="Contact">Contact no:</label>
+            <input type="text" id="contactno" required />
+        </div>
+        <div class="form-group">
+            <label for="District">District:</label>
+            <input type="text" id="district" required />
+        </div>
+        <div class="form-group">
+            <label for="gnDivision">GN division:</label>
+            <input type="text" id="gndivision" required />
+        </div>
+        <div class="form-group">
+            <label for="date_time">Date and Time:</label>
+            <input type="datetime-local" id="date_time" required />
+        </div>
+        <div class="form-group">
+            <label for="Symptoms">Symptoms:</label>
+            <input type="text" id="symptoms" required />
+        </div>
+
+        <div class="form-group">
+            <label for="image">Image:</label>
+            <input type="file" id="image" />
+        </div>
+
+        <div class="form-group">
+            <label for="action">Action:</label>
+            <select id="action" required>
+                <option value="Pending">Pending</option>
+                <option value="Reviewed">Reviewed</option>
+                <option value="Approved">Approved</option>
+            </select>
+        </div>
+        <button onclick="submitsymptom()">Submit</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        function submitsymptom() {
+            const report_id = parseInt(document.getElementById('report_id').value);
+            const date_time = document.getElementById('date_time').value;
+            const reporter_name = document.getElementById('name').value;
+            const contact_no = document.getElementById('contactno').value;
+            const district = document.getElementById('district').value;
+            const gn_division = document.getElementById('gndivision').value;
+            const description = document.getElementById('symptoms').value;
+            const imageInput = document.getElementById('image');
+            const image = imageInput.files[0]?.name || "";
+            const action = document.getElementById('action').value;
+            
+
+            const reportData = {
+                report_id,
+                date_time,
+                reporter_name,
+                contact_no,
+                district,
+                gn_division,
+                description,
+                image,
+                action
+            };
+
+            // Replace the URL below with your actual API endpoint
+            console.log("Sending data to API:", reportData);
+            fetch('http://localhost:5158/Symptoms/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reportData)
+            })
+                .then(response => {
+                    console.log("Response status:", response.status);
+                    console.log("Response object:", response);
+                    if (response.ok) {
+                        document.getElementById('message').textContent = 'Symptom submitted successfully!';
+                    } else {
+                        response.text().then(text => {
+                            console.error('Server responded with error:', text);
+                            document.getElementById('message').textContent = 'Submission failed: ' + text;
+                        });
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('message').textContent = 'Failed to submit.';
+                    console.error('Network error:', error);
+                });
+        }
+    </script>
+
+</body>
+</html>
+
+
+  <!--//          console.log('Submitting data:', reportData); // Debug log
+
+  //          // Changed URL to match the controller's base endpoint
+  //          const response = await fetch("http://localhost:7096/Symptoms/create", {
+  //              method: "POST",
+  //              headers: {
+  //                  "Content-Type": "application/json",
+  //                  "Accept": "application/json"
+  //              },
+  //              body: JSON.stringify(reportData)
+  //          });
+
+  //          // Add more detailed error logging
+  //          if (!response.ok) {
+  //              const errorText = await response.text();
+  //              console.error('Server response:', {
+  //                  status: response.status,
+  //                  statusText: response.statusText,
+  //                  body: errorText
+  //              });
+  //              throw new Error(`HTTP error! status: ${response.status}`);
+  //          }
+
+  //          const result = await response.json();
+  //          console.log('Success:', result);
+
+  //          if (result.success) {
+  //              setShowSuccess(true);
+  //              handleClear();
+  //              alert("Success");
+
+  //          } else {
+  //              throw new Error(result.message || 'Submission failed');
+  //          }
+  //      } catch (error) {
+  //          console.error("Error details:", error);
+  //          alert("Failed to submit symptoms. Please try again.");
+  //      }
+  //};-->
+        }
+    <!--</script>
+
+</body>
+</html>-->

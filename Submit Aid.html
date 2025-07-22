@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aid Request Form</title>
+    <style>
+        /* (Same CSS styles as before) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 350px;
+        }
+
+            .form-card h2 {
+                margin-bottom: 20px;
+                color: #2c3e50;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #2980b9;
+            }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <h2>Post Disaster Aid Request</h2>
+
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" required />
+        </div>
+
+        <div class="form-group">
+            <label for="contact_no">Contact No:</label>
+            <input type="text" id="contact_no" required />
+        </div>
+
+        <div class="form-group">
+            <label for="district">District:</label>
+            <input type="text" id="district" required />
+        </div>
+
+        <div class="form-group">
+            <label for="gn_division">GN Division:</label>
+            <input type="text" id="gn_division" required />
+        </div>
+
+        <div class="form-group">
+            <label for="date_time">Date and Time:</label>
+            <input type="datetime-local" id="date_time" required />
+        </div>
+
+        <div class="form-group">
+            <label for="type_support">Type of Support:</label>
+            <select id="type_support" required>
+                <option value="">Select type of support</option>
+                <option value="First aid">First aid</option>
+                <option value="Supply distribution">Supply distribution</option>
+                <option value="Evacuation">Evacuation</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="customSupportGroup" style="display:none;">
+            <label for="custom_support">Please specify:</label>
+            <input type="text" id="custom_support" />
+        </div>
+
+        <div class="form-group">
+            <label for="family_size">Family Size:</label>
+            <input type="number" id="family_size" min="1" required value="1" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" rows="4" required></textarea>
+        </div>
+
+        <button onclick="submitAidRequest()">Submit</button>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        // Show/hide custom support input if "Other" selected
+        document.getElementById('type_support').addEventListener('change', function () {
+            const customGroup = document.getElementById('customSupportGroup');
+            if (this.value === "Other") {
+                customGroup.style.display = 'block';
+                document.getElementById('custom_support').setAttribute('required', 'required');
+            } else {
+                customGroup.style.display = 'none';
+                document.getElementById('custom_support').removeAttribute('required');
+            }
+        });
+
+        async function submitAidRequest() {
+            const full_name = document.getElementById('full_name').value.trim();
+            const contact_no = document.getElementById('contact_no').value.trim();
+            const district = document.getElementById('district').value.trim();
+            const gn_division = document.getElementById('gn_division').value.trim();
+            const date_time = document.getElementById('date_time').value;
+            const type_support = document.getElementById('type_support').value === 'Other'
+                ? document.getElementById('custom_support').value.trim()
+                : document.getElementById('type_support').value;
+            const family_size = parseInt(document.getElementById('family_size').value, 10);
+            const description = document.getElementById('description').value.trim();
+
+            // Basic validation (can add more if needed)
+            if (!full_name || !contact_no || !district || !gn_division || !date_time || !type_support || !family_size || !description) {
+                document.getElementById('message').textContent = "Please fill in all required fields.";
+                return;
+            }
+
+            const payload = {
+                full_name,
+                contact_no,
+                district,
+                gn_division,
+                date_time,
+                type_support,
+                family_size,
+                description
+            };
+
+            console.log("Sending payload:", payload);
+
+            try {
+                const response = await fetch('http://localhost:5158/AidRequest/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    document.getElementById('message').textContent = 'Aid request submitted successfully!';
+                    // Optionally clear form:
+                    // document.querySelector('form').reset();
+                } else {
+                    const errorText = await response.text();
+                    document.getElementById('message').textContent = 'Submission failed: ' + errorText;
+                    console.error('Error response:', errorText);
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = 'Failed to submit. Network or server error.';
+                console.error('Network error:', error);
+            }
+        }
+    </script>
+
+</body>
+</html>
