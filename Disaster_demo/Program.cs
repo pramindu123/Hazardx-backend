@@ -1,15 +1,19 @@
 using Disaster_demo.Models;
 using Disaster_demo.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-var MyAllowSpecificOrigins = "*";
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Constants
+const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// Add services to the container
 builder.Services.AddControllers();
+
+// Swagger configuration (enabled for both development and production)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -19,7 +23,7 @@ builder.Services.AddDbContext<DisasterDBContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("defaultDB"));
 });
 
-// Register all your services
+// Register all services
 builder.Services.AddScoped<ISymptomsServices, SymptomsServices>();
 builder.Services.AddScoped<IAidRequestServices, AidRequestServices>();
 builder.Services.AddScoped<AlertServices>();
@@ -33,12 +37,11 @@ builder.Services.AddScoped<IContributionService, ContributionService>();
 // CORS Configuration
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 // JSON Configuration
@@ -50,29 +53,34 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
     });
 
+// Forwarded Headers (Critical for Railway)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction()) // Show Swagger in both environments
+// Middleware Pipeline
+app.UseForwardedHeaders(); // Must be first
+
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.RoutePrefix = "swagger";
+    });
 }
 
-// Railway-specific middleware configuration
-app.UseForwardedHeaders(); // Important for Railway's reverse proxy
-
+app.UseRouting();
 app.UseCors(MyAllowSpecificOrigins);
-
-// Only use HTTPS redirection if not in development
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-
 app.UseAuthorization();
 app.MapControllers();
 
-// Get PORT from environment variable or use default
+// Get PORT from Railway environment or use default
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
