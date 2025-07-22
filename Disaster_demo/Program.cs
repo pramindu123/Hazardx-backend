@@ -7,21 +7,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Constants
-const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-// Add services to the container
+// ===== SERVICES CONFIGURATION =====
 builder.Services.AddControllers();
 
-// Swagger configuration (enabled for both development and production)
+// Swagger (enabled for all environments)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database Configuration
+// Database
 builder.Services.AddDbContext<DisasterDBContext>(options =>
-{
-    options.UseMySQL(builder.Configuration.GetConnectionString("defaultDB"));
-});
+    options.UseMySQL(builder.Configuration.GetConnectionString("defaultDB")));
 
 // Register all services
 builder.Services.AddScoped<ISymptomsServices, SymptomsServices>();
@@ -34,53 +29,49 @@ builder.Services.AddScoped<IDMCOfficerServices, DMCOfficerServices>();
 builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 builder.Services.AddScoped<IContributionService, ContributionService>();
 
-// CORS Configuration
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy => policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-});
+// CORS
+builder.Services.AddCors(options => options.AddPolicy("AllowAll", policy =>
+    policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader()));
 
 // JSON Configuration
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-        options.JsonSerializerOptions.Converters.Add(
-            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-    });
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+});
 
-// Forwarded Headers (Critical for Railway)
+// Railway-specific proxy configuration
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardedHeaders = ForwardedHeaders.All;
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
 
+// ===== APP BUILD =====
 var app = builder.Build();
 
-// Middleware Pipeline
+// ===== MIDDLEWARE PIPELINE =====
 app.UseForwardedHeaders(); // Must be first
 
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = "swagger";
-    });
-}
+// Swagger UI in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HazardX API v1"));
 
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("AllowAll");
 app.UseAuthorization();
+
+// Minimal API endpoints
+app.MapGet("/", () => Results.Redirect("/swagger")); // Redirect root to Swagger
+app.MapGet("/ping", () => Results.Ok(new { Status = "OK", Time = DateTime.UtcNow }));
+app.MapGet("/api/health", () => Results.Json(new { Status = "Healthy" }));
+
+// Controllers
 app.MapControllers();
 
-// Get PORT from Railway environment or use default
+// ===== START APPLICATION =====
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
