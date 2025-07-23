@@ -2,7 +2,7 @@ namespace Disaster_demo.Models.Entities
 {
     public class VolunteerContributionDTO
     {
-        public int contribution_id { get; set; } 
+        public int contribution_id { get; set; }
         public int volunteer_id { get; set; }
         public string volunteer_name { get; set; }
         public string volunteer_contact { get; set; }

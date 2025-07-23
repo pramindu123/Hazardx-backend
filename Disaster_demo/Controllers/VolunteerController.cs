@@ -18,7 +18,7 @@ namespace Disaster_demo.Controllers
         }
 
 
-       
+
 
         [HttpPost("signup")]
         public async Task<IActionResult> Signup([FromBody] VolunteerSignupDTO dto)
@@ -31,7 +31,7 @@ namespace Disaster_demo.Controllers
             return Ok(new { userId });  // Return JSON object with userId
         }
 
-        
+
 
         [HttpGet("by-division")]
         public async Task<IActionResult> GetVolunteersByDivision([FromQuery] string divisionalSecretariat)
@@ -100,4 +100,3 @@ namespace Disaster_demo.Controllers
     }
 }
 
- 

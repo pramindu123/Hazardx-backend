@@ -74,12 +74,20 @@ namespace Disaster_demo.Controllers
                 : StatusCode(500, "Failed to add contribution");
         }
 
+        //[HttpGet("volunteer/{volunteerId}")]
+        //public async Task<IActionResult> GetByVolunteerId(int volunteerId)
+        //{
+        //    var contributions = await _contributionService.GetContributionsByVolunteerIdAsync(volunteerId);
+        //    return Ok(contributions);
+        //}
+
         [HttpGet("volunteer/{volunteerId}")]
         public async Task<IActionResult> GetByVolunteerId(int volunteerId)
         {
             var contributions = await _contributionService.GetContributionsByVolunteerIdAsync(volunteerId);
             return Ok(contributions);
         }
+
 
 
 

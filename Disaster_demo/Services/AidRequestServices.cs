@@ -126,6 +126,62 @@ namespace Disaster_demo.Services
             return approvedRequests;
         }
 
+        //public async Task<List<AidRequests>> GetOngoingAidRequestsAsync(string divisionalSecretariat)
+        //{
+        //    divisionalSecretariat = divisionalSecretariat.Trim();
+
+        //    var ongoing = await _dbContext.AidRequests
+        //        .Where(a =>
+        //            a.divisional_secretariat == divisionalSecretariat &&
+        //            (a.request_type == AidRequestType.Emergency ||
+        //             (a.request_type == AidRequestType.PostDisaster && a.dsApprove == DsApprovalStatus.Approved))
+        //            && !a.IsFulfilled
+        //        )
+        //        .OrderByDescending(a => a.date_time)
+        //        .ToListAsync();
+
+        //    return ongoing;
+        //}
+
+        public async Task<List<AidRequests>> GetOngoingAidRequestsAsync(string? divisionalSecretariat = null)
+        {
+            var query = _dbContext.AidRequests.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(divisionalSecretariat))
+            {
+                divisionalSecretariat = divisionalSecretariat.Trim();
+                query = query.Where(a => a.divisional_secretariat == divisionalSecretariat);
+            }
+
+            return await query
+                .Where(a =>
+                    (a.request_type == AidRequestType.Emergency ||
+                     (a.request_type == AidRequestType.PostDisaster && a.dsApprove == DsApprovalStatus.Approved))
+                    && !a.IsFulfilled)
+                .OrderByDescending(a => a.date_time)
+                .ToListAsync();
+        }
+
+
+        public async Task<bool> MarkAidRequestAsResolvedAsync(int aidId)
+        {
+            var aidRequest = await _dbContext.AidRequests.FirstOrDefaultAsync(a => a.aid_id == aidId);
+            if (aidRequest == null) return false;
+
+            aidRequest.IsFulfilled = true;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+
+
+
+        public async Task<int> GetContributionCountAsync(int aidId)
+        {
+            return await _dbContext.Contribution
+                .Where(c => c.aid_id == aidId)
+                .CountAsync();
+        }
 
 
 
