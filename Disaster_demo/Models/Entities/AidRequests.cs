@@ -34,5 +34,3 @@ namespace Disaster_demo.Models.Entities
         public bool IsFulfilled { get; set; } = false;
     }
 }
-
-

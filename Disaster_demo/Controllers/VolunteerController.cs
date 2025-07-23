@@ -86,17 +86,29 @@ namespace Disaster_demo.Controllers
             return Ok("Availability updated successfully.");
         }
 
+        //[HttpGet("emergency-support")]
+        //public async Task<IActionResult> GetEmergencyAidRequests() =>
+        //Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
+
+        //[HttpGet("non-emergency-support")]
+        //public async Task<IActionResult> GetNonEmergencyAidRequests() =>
+        //    Ok(await _volunteerServices.GetNonEmergencyAidRequestsAsync());
+
+
         [HttpGet("emergency-support")]
-        public async Task<IActionResult> GetEmergencyAidRequests() =>
-        Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
+        public async Task<IActionResult> GetEmergencyAidRequests([FromQuery] int volunteerId)
+        {
+            var aids = await _volunteerServices.GetEmergencyAidRequestsForVolunteerAsync(volunteerId);
+            return Ok(aids);
+        }
 
         [HttpGet("non-emergency-support")]
-        public async Task<IActionResult> GetNonEmergencyAidRequests() =>
-            Ok(await _volunteerServices.GetNonEmergencyAidRequestsAsync());
-
-
+        public async Task<IActionResult> GetNonEmergencyAidRequests([FromQuery] int volunteerId)
+        {
+            var aids = await _volunteerServices.GetNonEmergencyAidRequestsForVolunteerAsync(volunteerId);
+            return Ok(aids);
+        }
 
 
     }
 }
-

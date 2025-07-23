@@ -4,8 +4,8 @@ namespace Disaster_demo.Services
 {
     public interface IVolunteerServices
     {
-        Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync();
-        Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsAsync();
+        Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsForVolunteerAsync(int volunteerId);
+        Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsForVolunteerAsync(int volunteerId);
         Task<LoginResponseDTO?> GetVolunteerDetailsAsync(string userId);
         Task<List<Volunteer>> GetVolunteersByDistrictAsync(string district);
         Task<List<Volunteer>> GetVolunteersByDsDivisionAsync(string divisionalSecretariat);

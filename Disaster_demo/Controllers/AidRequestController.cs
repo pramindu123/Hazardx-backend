@@ -43,6 +43,8 @@ namespace Disaster_demo.Controllers
         //    return Ok(result);
         //}
 
+
+
         [HttpGet("pending-post-disaster")]
         public async Task<IActionResult> GetPendingPostDisasterAidRequests([FromQuery] string divisionalSecretariat)
         {
@@ -80,6 +82,55 @@ namespace Disaster_demo.Controllers
         {
             var result = await _aidrequestServices.GetDsApprovedAidRequests();
             return Ok(result);
+        }
+
+
+
+        //[HttpGet("ongoing")]
+        //public async Task<IActionResult> GetOngoingAidRequests([FromQuery] string divisionalSecretariat)
+        //{
+        //    if (string.IsNullOrWhiteSpace(divisionalSecretariat))
+        //    {
+        //        return BadRequest("Divisional Secretariat is required.");
+        //    }
+
+        //    var ongoing = await _aidrequestServices.GetOngoingAidRequestsAsync(divisionalSecretariat);
+        //    return Ok(ongoing);
+        //}
+
+        [HttpGet("ongoing")]
+        public async Task<List<AidRequests>> GetOngoingAidRequests([FromQuery] string? divisionalSecretariat)
+        {
+            return await _aidrequestServices.GetOngoingAidRequestsAsync(divisionalSecretariat);
+        }
+
+
+        [HttpPost("resolve/{aidId}")]
+        public async Task<IActionResult> MarkAidRequestAsResolved(int aidId)
+        {
+            var result = await _aidrequestServices.MarkAidRequestAsResolvedAsync(aidId);
+            if (!result)
+                return NotFound(new { message = "Aid request not found." });
+
+            return Ok(new { message = "Aid request marked as resolved!" });
+        }
+
+
+
+
+        [HttpGet("contribution-count/{aidId}")]
+        public async Task<IActionResult> GetContributionCount(int aidId)
+        {
+            var count = await _aidrequestServices.GetContributionCountAsync(aidId);
+            return Ok(new { aidId, contributionsReceived = count });
+        }
+
+
+        [HttpGet("delivered")]
+        public async Task<IActionResult> GetDeliveredAidRequests()
+        {
+            var delivered = await _aidrequestServices.GetDeliveredAidRequestsAsync();
+            return Ok(delivered);
         }
 
 

@@ -98,20 +98,38 @@ namespace Disaster_demo.Services
             return true;
         }
 
-        public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync()
+        //public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync()
+        //{
+        //    return await _dbContext.AidRequests
+        //        .Where(r => r.request_type == AidRequestType.Emergency)
+        //        .ToListAsync();
+        //}
+
+
+        //public async Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsAsync()
+        //{
+        //    return await _dbContext.AidRequests
+        //        .Where(r => r.dsApprove == DsApprovalStatus.Approved
+        //                    && r.request_type == AidRequestType.PostDisaster
+        //                    && !r.IsFulfilled)
+        //        .ToListAsync();
+        //}
+
+        public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsForVolunteerAsync(int volunteerId)
         {
             return await _dbContext.AidRequests
                 .Where(r => r.request_type == AidRequestType.Emergency)
+                .Where(r => !_dbContext.Contribution.Any(c => c.aid_id == r.aid_id && c.volunteer_id == volunteerId))
                 .ToListAsync();
         }
 
-
-        public async Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsAsync()
+        public async Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsForVolunteerAsync(int volunteerId)
         {
             return await _dbContext.AidRequests
                 .Where(r => r.dsApprove == DsApprovalStatus.Approved
                             && r.request_type == AidRequestType.PostDisaster
                             && !r.IsFulfilled)
+                .Where(r => !_dbContext.Contribution.Any(c => c.aid_id == r.aid_id && c.volunteer_id == volunteerId))
                 .ToListAsync();
         }
 

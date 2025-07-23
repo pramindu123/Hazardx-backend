@@ -183,6 +183,14 @@ namespace Disaster_demo.Services
                 .CountAsync();
         }
 
+        public async Task<List<AidRequests>> GetDeliveredAidRequestsAsync()
+        {
+            return await _dbContext.AidRequests
+                .Where(a => a.IsFulfilled == true)
+                .OrderByDescending(a => a.date_time)
+                .ToListAsync();
+        }
+
 
 
         //public async Task<List<AidRequests>> GetAidRequestsByDistrict(string district)

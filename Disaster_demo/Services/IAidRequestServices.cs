@@ -11,6 +11,7 @@ namespace Disaster_demo.Services
         Task<bool> MarkAidRequestAsResolvedAsync(int aidId);
         Task<List<AidRequests>> GetPendingEmergencyAidRequestsAsync();
         Task<List<AidRequests>> GetPendingPostDisasterAidRequestsAsync(string divisionalSecretariat);
+        Task<List<AidRequests>> GetDeliveredAidRequestsAsync();
         bool UpdateStatus(StatusUpdateModel model);
     }
 }
