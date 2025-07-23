@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // Add this for MySQL
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database Configuration - Fixed with proper MySQL setup
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Database
 builder.Services.AddDbContext<DisasterDBContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySQL(builder.Configuration.GetConnectionString("defaultDB")));
 
 // Register all services
 builder.Services.AddScoped<ISymptomsServices, SymptomsServices>();
@@ -58,13 +56,6 @@ var app = builder.Build();
 // ===== MIDDLEWARE PIPELINE =====
 app.UseForwardedHeaders(); // Must be first
 
-// Database migration - Add this to ensure database is created/migrated
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<DisasterDBContext>();
-    dbContext.Database.Migrate();
-}
-
 // Swagger UI in all environments
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HazardX API v1"));
@@ -83,5 +74,5 @@ app.MapControllers();
 
 // ===== START APPLICATION =====
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Logger.LogInformation($"Starting application on port {port} with connection string: {connectionString}");
 app.Run($"http://0.0.0.0:{port}");
+
