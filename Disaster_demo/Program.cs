@@ -16,7 +16,8 @@ builder.Services.AddSwaggerGen();
 
 // Database
 builder.Services.AddDbContext<DisasterDBContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("defaultDB")));
+    options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Register all services
 builder.Services.AddScoped<ISymptomsServices, SymptomsServices>();
