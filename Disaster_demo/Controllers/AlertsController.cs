@@ -42,7 +42,7 @@ namespace Disaster_demo.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAlerts()
         {
-            var alerts = await _alertServices.getAlerts(); 
+            var alerts = await _alertServices.getAlerts();
 
             var formatted = alerts.Select(alert => new
             {
