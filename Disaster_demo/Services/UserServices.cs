@@ -1,6 +1,6 @@
 ﻿using Disaster_demo.Models;
 using Disaster_demo.Models.Entities;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 
 namespace Disaster_demo.Services
 {
@@ -13,7 +13,7 @@ namespace Disaster_demo.Services
             this._dbContext = dbContext;
         }
 
-        
+
 
         public async Task<LoginResponseDTO?> LoginAsync(LoginDTO dto)
         {
@@ -65,18 +65,6 @@ namespace Disaster_demo.Services
                 };
             }
 
-
-            //else if (user.role == UserRole.volunteer)
-            //{
-            //    var volunteer = await _dbContext.Volunteers
-            //        .FirstOrDefaultAsync(v => v.user_id == user.user_id);
-
-            //    if (volunteer != null)
-            //    {
-            //        response.GnDivision = volunteer.gn_division; 
-            //    }
-            //}
-
             else if (user.role == UserRole.volunteer)
             {
                 var volunteer = await _dbContext.Volunteers
@@ -95,6 +83,9 @@ namespace Disaster_demo.Services
 
             return response;
         }
+
+
+
 
     }
 }

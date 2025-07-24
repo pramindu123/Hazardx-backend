@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Disaster_demo.Models
 {
-    public class DisasterDBContext :DbContext
+    public class DisasterDBContext : DbContext
     {
         //private DbSet<GN_Officer> Gn_officer;
         private DbSet<Symptoms> symptoms;
@@ -94,7 +94,7 @@ namespace Disaster_demo.Models
             modelBuilder.Entity<Contribution>()
         .ToTable("contributions");
 
-            
+
 
 
 

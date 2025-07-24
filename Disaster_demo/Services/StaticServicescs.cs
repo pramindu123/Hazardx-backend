@@ -30,7 +30,7 @@ namespace Disaster_demo.Services
             return await _dbContext.Alerts.CountAsync();
         }
 
-        
+
 
         public async Task<int> GetTotalAidRequestsCountAsync()
         {

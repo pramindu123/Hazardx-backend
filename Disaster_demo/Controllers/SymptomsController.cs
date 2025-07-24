@@ -16,7 +16,7 @@ namespace Disaster_demo.Controllers
             this._symptomServices = SymptomsService;
         }
 
-        
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateSymptoms([FromBody] Symptoms symptoms)
         {
@@ -39,22 +39,6 @@ namespace Disaster_demo.Controllers
             }
         }
 
-
-
-
-        //[HttpGet("pendingReports")]
-        //public async Task<IActionResult> GetPendingReportsByDivision([FromQuery] string divisionalSecretariat)
-        //{
-        //    if (string.IsNullOrWhiteSpace(divisionalSecretariat))
-        //    {
-        //        return BadRequest("Divisional Secretariat is required.");
-        //    }
-        //    var reports = await this._symptomServices.GetPendingReportsByDivisionAsync(divisionalSecretariat);
-
-
-        //    return Ok(reports);
-        //}
-
         [HttpGet("pendingReportsByDistrict")]
         public async Task<IActionResult> GetPendingReportsByDistrict([FromQuery] string district)
         {
@@ -66,16 +50,6 @@ namespace Disaster_demo.Controllers
             var reports = await _symptomServices.GetPendingReportsByDistrictAsync(district);
             return Ok(reports);
         }
-
-
-        //[HttpGet("pendingByDistrict/{district}")]
-        //public async Task<IActionResult> GetPendingReportsByDistrict(string district)
-        //{
-        //    var reports = await _symptomServices.GetPendingReportsByDistrictAsync(district);
-        //    return Ok(reports);
-        //}
-
-
 
 
         [HttpPost("updateStatus")]
@@ -92,7 +66,7 @@ namespace Disaster_demo.Controllers
             return NotFound(new { success = false, message = "Report not found" });
         }
 
-         [HttpGet("approvedByDs/{district}")]
+        [HttpGet("approvedByDs/{district}")]
         public async Task<IActionResult> GetDsApprovedSymptomsByDistrict(string district)
         {
             var reports = await _symptomServices.GetDsApprovedSymptomsByDistrictAsync(district);

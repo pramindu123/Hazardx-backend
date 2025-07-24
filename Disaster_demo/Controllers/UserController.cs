@@ -16,19 +16,6 @@ namespace Disaster_demo.Controllers
             _userServices = userServices;
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginDTO dto)
-        //{
-        //    var result = await _userServices.LoginAsync(dto);
-
-        //    if (result == null || result.Role == default(UserRole))
-        //    {
-        //        return Unauthorized(result?.Message ?? "Invalid credentials.");
-        //    }
-
-
-        //    return Ok(result);
-        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)

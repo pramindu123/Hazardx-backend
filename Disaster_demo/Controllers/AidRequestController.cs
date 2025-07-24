@@ -31,19 +31,6 @@ namespace Disaster_demo.Controllers
 
 
 
-        //[HttpGet("pending")]
-        //public async Task<IActionResult> GetPendingAidRequests([FromQuery] string divisionalSecretariat)
-        //{
-        //    if (string.IsNullOrEmpty(divisionalSecretariat))
-        //    {
-        //        return BadRequest("Divisional Secretariat is required.");
-        //    }
-
-        //    var result = await _aidrequestServices.getPendingAidRequests(divisionalSecretariat);
-        //    return Ok(result);
-        //}
-
-
 
         [HttpGet("pending-post-disaster")]
         public async Task<IActionResult> GetPendingPostDisasterAidRequests([FromQuery] string divisionalSecretariat)
@@ -86,17 +73,6 @@ namespace Disaster_demo.Controllers
 
 
 
-        //[HttpGet("ongoing")]
-        //public async Task<IActionResult> GetOngoingAidRequests([FromQuery] string divisionalSecretariat)
-        //{
-        //    if (string.IsNullOrWhiteSpace(divisionalSecretariat))
-        //    {
-        //        return BadRequest("Divisional Secretariat is required.");
-        //    }
-
-        //    var ongoing = await _aidrequestServices.GetOngoingAidRequestsAsync(divisionalSecretariat);
-        //    return Ok(ongoing);
-        //}
 
         [HttpGet("ongoing")]
         public async Task<List<AidRequests>> GetOngoingAidRequests([FromQuery] string? divisionalSecretariat)
@@ -134,32 +110,6 @@ namespace Disaster_demo.Controllers
         }
 
 
-        //[HttpGet("byDistrict/{district}")]
-        //public async Task<IActionResult> GetAidRequestsByDistrict(string district)
-        //{
-        //    if (string.IsNullOrEmpty(district))
-        //        return BadRequest("District is required.");
-
-        //    var requests = await _aidrequestServices.GetAidRequestsByDistrict(district);
-        //    return Ok(requests);
-        //}
-
-        //[HttpGet("dmc-approved")]
-        //public async Task<ActionResult<List<AidRequests>>> GetDmcApprovedAidRequests()
-        //{
-        //    var result = await _aidrequestServices.GetDmcApprovedAidRequests();
-        //    return Ok(result);
-        //}
-
-        //[HttpGet("all-dmc")]
-        //public async Task<ActionResult<List<AidRequests>>> GetAllDmcRelatedAidRequests([FromQuery] string district)
-        //{
-        //    if (string.IsNullOrEmpty(district))
-        //        return BadRequest("District is required.");
-
-        //    var result = await _aidrequestServices.GetAllDmcRelatedAidRequests(district);
-        //    return Ok(result);
-        //}
 
 
 

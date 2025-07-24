@@ -98,22 +98,6 @@ namespace Disaster_demo.Services
             return true;
         }
 
-        //public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsAsync()
-        //{
-        //    return await _dbContext.AidRequests
-        //        .Where(r => r.request_type == AidRequestType.Emergency)
-        //        .ToListAsync();
-        //}
-
-
-        //public async Task<IEnumerable<AidRequests>> GetNonEmergencyAidRequestsAsync()
-        //{
-        //    return await _dbContext.AidRequests
-        //        .Where(r => r.dsApprove == DsApprovalStatus.Approved
-        //                    && r.request_type == AidRequestType.PostDisaster
-        //                    && !r.IsFulfilled)
-        //        .ToListAsync();
-        //}
 
         public async Task<IEnumerable<AidRequests>> GetEmergencyAidRequestsForVolunteerAsync(int volunteerId)
         {

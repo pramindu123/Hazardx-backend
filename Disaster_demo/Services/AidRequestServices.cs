@@ -16,17 +16,7 @@ namespace Disaster_demo.Services
         }
 
 
-        //public async Task<List<AidRequests>> getPendingAidRequests(string divisionalSecretariat)
-        //{
-        //    divisionalSecretariat = divisionalSecretariat.Trim();
 
-        //    var pending = await _dbContext.AidRequests
-        //        .Where(s => s.dsApprove == DsApprovalStatus.Pending && s.divisional_secretariat == divisionalSecretariat)
-        //        .OrderByDescending(s => s.date_time)
-        //        .ToListAsync();
-
-        //    return pending;
-        //}
 
         public async Task<List<AidRequests>> GetPendingPostDisasterAidRequestsAsync(string divisionalSecretariat)
         {
@@ -90,28 +80,7 @@ namespace Disaster_demo.Services
                     return true;
                 }
             }
-            //else if (string.Equals(model.Actor, "DMC", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    if (Enum.TryParse<DmcApprovalStatus>(model.Status, true, out var parsedDmcStatus))
-            //    {
-            //        aidRequest.dmcApprove = parsedDmcStatus;
 
-
-            //        if (parsedDmcStatus == DmcApprovalStatus.Approved)
-            //        {
-            //            var dsOfficer = _dbContext.DS_Officers
-            //                .FirstOrDefault(g => g.divisional_secretariat.ToLower() == aidRequest.divisional_secretariat.ToLower());
-
-            //            if (dsOfficer != null)
-            //            {
-            //                aidRequest.assign_ds = dsOfficer.user_id;
-            //            }
-            //        }
-
-            //        _dbContext.SaveChanges();
-            //        return true;
-            //    }
-            //}
 
             return false;
         }
@@ -126,22 +95,7 @@ namespace Disaster_demo.Services
             return approvedRequests;
         }
 
-        //public async Task<List<AidRequests>> GetOngoingAidRequestsAsync(string divisionalSecretariat)
-        //{
-        //    divisionalSecretariat = divisionalSecretariat.Trim();
 
-        //    var ongoing = await _dbContext.AidRequests
-        //        .Where(a =>
-        //            a.divisional_secretariat == divisionalSecretariat &&
-        //            (a.request_type == AidRequestType.Emergency ||
-        //             (a.request_type == AidRequestType.PostDisaster && a.dsApprove == DsApprovalStatus.Approved))
-        //            && !a.IsFulfilled
-        //        )
-        //        .OrderByDescending(a => a.date_time)
-        //        .ToListAsync();
-
-        //    return ongoing;
-        //}
 
         public async Task<List<AidRequests>> GetOngoingAidRequestsAsync(string? divisionalSecretariat = null)
         {
@@ -192,46 +146,6 @@ namespace Disaster_demo.Services
         }
 
 
-
-        //public async Task<List<AidRequests>> GetAidRequestsByDistrict(string district)
-        //{
-        //    var requests = await _dbContext.AidRequests
-        //        .Where(a => a.district.ToLower() == district.ToLower()
-        //                    && a.dsApprove == DsApprovalStatus.Approved
-        //                    && a.dmcApprove == DmcApprovalStatus.Pending)
-        //        .OrderByDescending(a => a.date_time)
-        //        .ToListAsync();
-
-        //    return requests;
-        //}
-
-
-
-        //public async Task<List<AidRequests>> GetDmcApprovedAidRequests()
-        //{
-        //    var approvedRequests = await _dbContext.AidRequests
-
-        //        .Where(a => a.dsApprove == DsApprovalStatus.Approved && a.dmcApprove == DmcApprovalStatus.Approved)
-        //        .OrderByDescending(a => a.date_time)
-        //        .ToListAsync();
-
-        //    return approvedRequests;
-        //}
-
-
-
-        //public async Task<List<AidRequests>> GetAllDmcRelatedAidRequests(string district)
-        //{
-        //    var result = await _dbContext.AidRequests
-        //        .Where(a =>
-        //            a.district.ToLower() == district.ToLower() &&
-        //            a.dsApprove == DsApprovalStatus.Approved &&
-        //            (a.dmcApprove == DmcApprovalStatus.Pending || a.dmcApprove == DmcApprovalStatus.Approved))
-        //        .OrderByDescending(a => a.date_time)
-        //        .ToListAsync();
-
-        //    return result;
-        //}
 
 
 

@@ -40,70 +40,6 @@ namespace Disaster_demo.Services
                 .ToListAsync();
         }
 
-
-        //public async Task<List<Contribution>> GetContributionsByVolunteerIdAsync(int volunteerId)
-        //{
-        //    return await _dbContext.Contribution
-        //        .Where(c => c.volunteer_id == volunteerId && c.status == "Approved")
-        //        .Join(
-        //            _dbContext.AidRequests,
-        //            contribution => contribution.aid_id,
-        //            aidRequest => aidRequest.aid_id,
-        //            (contribution, aidRequest) => new { contribution, aidRequest }
-        //        )
-        //        .Where(joined => joined.aidRequest.dsApprove == DsApprovalStatus.Approved)
-        //        .OrderByDescending(joined => joined.contribution.created_at)
-        //        .Select(joined => joined.contribution)
-        //        .ToListAsync();
-        //}
-
-
-
-
-        public async Task<List<Contribution>> GetContributionsByAidIdAsync(int aidId)
-        {
-            return await _dbContext.Contribution
-                .Where(c => c.aid_id == aidId)
-                .OrderByDescending(c => c.created_at)
-                .ToListAsync();
-        }
-
-        public async Task<bool> VerifyContributionAsync(int contributionId)
-        {
-            var contribution = await _dbContext.Contribution.FindAsync(contributionId);
-            if (contribution == null) return false;
-
-            contribution.status = "Verified";
-            return await _dbContext.SaveChangesAsync() > 0;
-        }
-
-        //public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string division)
-        //{
-        //    return await _dbContext.Contribution
-        //        .Where(c => c.status == "Pending")
-        //        .Join(
-        //            _dbContext.Volunteers,
-        //            c => c.volunteer_id,
-        //            v => v.user_id,  // If you use Id in Volunteer (inherited from Users)
-        //            (c, v) => new { Contribution = c, Volunteer = v }
-        //        )
-        //        .Where(cv => cv.Volunteer.divisional_secretariat == division)
-        //        .Select(cv => new VolunteerContributionDTO
-        //        {
-        //            contribution_id = cv.Contribution.contribution_id,
-        //            volunteer_id = cv.Volunteer.user_id,
-        //            volunteer_name = cv.Volunteer.name,
-        //            volunteer_contact = cv.Volunteer.contact_number,
-        //            district = cv.Contribution.district,
-        //            type_support = cv.Contribution.type_support,
-        //            description = cv.Contribution.description,
-        //            image = cv.Contribution.image,
-        //            status = cv.Contribution.status
-        //        })
-        //        .OrderByDescending(cv => cv.contribution_id)
-        //        .ToListAsync();
-        //}
-
         public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat)
         {
             return await _dbContext.Contribution
@@ -159,22 +95,6 @@ namespace Disaster_demo.Services
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-
-
-
-        //public async Task<int> GetTotalContributionsCountAsync(int volunteerId)
-        //{
-        //    return await _dbContext.Contribution
-        //        .CountAsync(c => c.volunteer_id == volunteerId);
-        //}
-
-        //public async Task<Contribution> GetLatestContributionAsync(int volunteerId)
-        //{
-        //    return await _dbContext.Contribution
-        //        .Where(c => c.volunteer_id == volunteerId)
-        //        .OrderByDescending(c => c.created_at)
-        //        .FirstOrDefaultAsync();
-        //}
 
 
         public async Task<int> GetTotalContributionsCountAsync(int volunteerId)

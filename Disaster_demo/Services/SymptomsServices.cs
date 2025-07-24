@@ -17,12 +17,6 @@ namespace Disaster_demo.Services
 
 
 
-        //public async Task<List<Symptoms>> GetPendingReportsByDivisionAsync(string divisionalSecretariat)
-        //{
-        //    return await _dbContext.Symptoms
-        //        .Where(r => r.action == "Pending" && r.divisional_secretariat == divisionalSecretariat)
-        //        .ToListAsync();
-        //}
 
         public async Task<List<Symptoms>> GetPendingReportsByDistrictAsync(string district)
         {
@@ -83,7 +77,7 @@ namespace Disaster_demo.Services
             return true;
         }
 
-        
+
 
 
         public async Task<List<Symptoms>> GetDsApprovedSymptomsByDistrictAsync(string district)
@@ -98,4 +92,3 @@ namespace Disaster_demo.Services
     }
 }
 
- 

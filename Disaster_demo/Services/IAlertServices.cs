@@ -9,8 +9,8 @@ namespace Disaster_demo.Services
         Task<List<Alerts>> GetAlertsByDistrictAsync(string district);
         Task<List<Alerts>> GetAlertsByDivisionAsync(string divisionalSecretariat);
         Task<bool> MarkAlertAsResolved(int id);
-        //Task<List<Alerts>> GetAllAlertsAsync();
 
-      
+
+
     }
 }

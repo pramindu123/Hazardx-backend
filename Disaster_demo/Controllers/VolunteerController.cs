@@ -86,13 +86,6 @@ namespace Disaster_demo.Controllers
             return Ok("Availability updated successfully.");
         }
 
-        //[HttpGet("emergency-support")]
-        //public async Task<IActionResult> GetEmergencyAidRequests() =>
-        //Ok(await _volunteerServices.GetEmergencyAidRequestsAsync());
-
-        //[HttpGet("non-emergency-support")]
-        //public async Task<IActionResult> GetNonEmergencyAidRequests() =>
-        //    Ok(await _volunteerServices.GetNonEmergencyAidRequestsAsync());
 
 
         [HttpGet("emergency-support")]

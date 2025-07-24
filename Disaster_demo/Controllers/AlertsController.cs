@@ -19,25 +19,7 @@ namespace Disaster_demo.Controllers
 
 
 
-        //[HttpGet("all")]
-        //public async Task<IActionResult> getAlerts() 
-        //{
-        //    var alerts = await _alertServices.GetAllAlertsAsync();
 
-        //    var formatted = alerts.Select(alert => new
-        //    {
-        //        id = alert.alert_id,
-        //        type = alert.alert_type,
-        //        district = alert.district,
-        //        gnDivision = alert.gn_division,
-        //        severity = alert.severity.ToString(), // Assuming it's an enum
-        //        status = alert.status.ToString(),     // Assuming it's an enum
-        //        date = alert.date_time.ToString("yyyy-MM-dd"),
-        //        time = alert.date_time.ToString("HH:mm")
-        //    });
-
-        //    return Ok(formatted);
-        //}
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAlerts()
@@ -102,25 +84,7 @@ namespace Disaster_demo.Controllers
             return Ok(alerts);
         }
 
-        //[HttpGet("all")]
-        //public async Task<IActionResult> GetAllAlerts()
-        //{
-        //    var alerts = await _alertServices.GetAllAlertsAsync();
 
-        //    var formatted = alerts.Select(alert => new
-        //    {
-        //        id = alert.alert_id,
-        //        type = alert.alert_type,
-        //        district = alert.district,
-        //        gnDivision = alert.gn_division,
-        //        severity = alert.severity.ToString(), // Assuming it's an enum
-        //        status = alert.status.ToString(),     // Assuming it's an enum
-        //        date = alert.date_time.ToString("yyyy-MM-dd"),
-        //        time = alert.date_time.ToString("HH:mm")
-        //    });
-
-        //    return Ok(formatted);
-        //}
 
 
 

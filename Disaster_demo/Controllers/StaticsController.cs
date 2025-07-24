@@ -12,7 +12,7 @@ namespace Disaster_demo.Controllers
             _statisticsService = statisticsService;
         }
 
-       
+
         [HttpGet("active-volunteers-count")]
         public async Task<IActionResult> GetActiveVolunteersCount()
         {
