@@ -109,8 +109,41 @@ namespace Disaster_demo.Controllers
             return Ok(delivered);
         }
 
+        [HttpGet("pending-post-disaster/count")]
+        public async Task<IActionResult> GetPendingPostDisasterAidRequestsCount([FromQuery] string divisionalSecretariat)
+        {
+            if (string.IsNullOrWhiteSpace(divisionalSecretariat))
+            {
+                return BadRequest("Divisional Secretariat is required.");
+            }
+
+            var count = await _aidrequestServices.GetPendingPostDisasterAidRequestsCountAsync(divisionalSecretariat);
+            return Ok(new { pendingCount = count });
+        }
 
 
+
+
+
+        [HttpGet("aids-for-district")]
+        public async Task<IActionResult> GetDsApprovedPostDisasterAndEmergencyByDistrict(
+        [FromQuery] string district,
+        [FromQuery] bool? isFulfilled = null)
+        {
+            if (string.IsNullOrWhiteSpace(district))
+            {
+                return BadRequest("District is required.");
+            }
+
+            var (dsApprovedPostDisaster, emergency) =
+                await _aidrequestServices.GetDsApprovedPostDisasterAndEmergencyAidRequestsByDistrictAsync(district, isFulfilled);
+
+            return Ok(new
+            {
+                dsApprovedPostDisaster,
+                emergency
+            });
+        }
 
 
 

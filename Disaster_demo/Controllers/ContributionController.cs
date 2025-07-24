@@ -82,5 +82,13 @@ namespace Disaster_demo.Controllers
             return Ok(latest);
         }
 
+        [HttpGet("pending/count")]
+        public async Task<IActionResult> GetPendingContributionsCount([FromQuery] string divisional_secretariat)
+        {
+            var count = await _contributionService.GetPendingContributionsCountAsync(divisional_secretariat);
+            return Ok(new { pendingCount = count });
+        }
+
+
     }
 }

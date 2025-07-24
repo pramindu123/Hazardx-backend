@@ -159,6 +159,44 @@ namespace Disaster_demo.Services
 
 
 
+        public async Task<(List<AidRequests> dsApprovedPostDisaster, List<AidRequests> emergency)>
+    GetDsApprovedPostDisasterAndEmergencyAidRequestsByDistrictAsync(string district, bool? isFulfilled = null)
+        {
+            district = district.Trim();
+
+            var dsQuery = _dbContext.AidRequests
+                .Where(a =>
+                    a.dsApprove == DsApprovalStatus.Approved &&
+                    a.request_type == AidRequestType.PostDisaster &&
+                    a.district == district);
+
+            var emergencyQuery = _dbContext.AidRequests
+                .Where(a =>
+                    a.request_type == AidRequestType.Emergency &&
+                    a.district == district);
+
+            // Apply filter if isFulfilled parameter is provided
+            if (isFulfilled.HasValue)
+            {
+                dsQuery = dsQuery.Where(a => a.IsFulfilled == isFulfilled.Value);
+                emergencyQuery = emergencyQuery.Where(a => a.IsFulfilled == isFulfilled.Value);
+            }
+
+            var dsApprovedPostDisaster = await dsQuery
+                .OrderByDescending(a => a.date_time)
+                .ToListAsync();
+
+            var emergency = await emergencyQuery
+                .OrderByDescending(a => a.date_time)
+                .ToListAsync();
+
+            return (dsApprovedPostDisaster, emergency);
+        }
+
+
+
+
+
 
     }
 }
