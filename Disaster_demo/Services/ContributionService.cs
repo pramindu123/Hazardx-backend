@@ -40,6 +40,7 @@ namespace Disaster_demo.Services
                 .ToListAsync();
         }
 
+
         public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat)
         {
             return await _dbContext.Contribution
@@ -110,6 +111,20 @@ namespace Disaster_demo.Services
                 .OrderByDescending(c => c.created_at)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetPendingContributionsCountAsync(string divisional_secretariat)
+        {
+            return await _dbContext.Contribution
+                .Where(c => c.status == "Pending")
+                .Join(
+                    _dbContext.AidRequests,
+                    c => c.aid_id,
+                    a => a.aid_id,
+                    (c, a) => new { Contribution = c, AidRequest = a }
+                )
+                .CountAsync(x => x.AidRequest.divisional_secretariat == divisional_secretariat);
+        }
+
     }
 
 }

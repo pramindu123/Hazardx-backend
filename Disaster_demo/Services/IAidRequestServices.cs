@@ -10,7 +10,7 @@ namespace Disaster_demo.Services
         Task<List<AidRequests>> GetOngoingAidRequestsAsync(string divisionalSecretariat);
         Task<bool> MarkAidRequestAsResolvedAsync(int aidId);
         Task<List<AidRequests>> GetPendingEmergencyAidRequestsAsync();
-
+        Task<int> GetPendingPostDisasterAidRequestsCountAsync(string divisionalSecretariat);
         Task<List<AidRequests>> GetPendingPostDisasterAidRequestsAsync(string divisionalSecretariat);
         Task<List<AidRequests>> GetDeliveredAidRequestsAsync();
         bool UpdateStatus(StatusUpdateModel model);

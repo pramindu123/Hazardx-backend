@@ -145,6 +145,16 @@ namespace Disaster_demo.Services
                 .ToListAsync();
         }
 
+        public async Task<int> GetPendingPostDisasterAidRequestsCountAsync(string divisionalSecretariat)
+        {
+            divisionalSecretariat = divisionalSecretariat.Trim();
+
+            return await _dbContext.AidRequests
+                .Where(s => s.dsApprove == DsApprovalStatus.Pending
+                            && s.request_type == AidRequestType.PostDisaster
+                            && s.divisional_secretariat == divisionalSecretariat)
+                .CountAsync();
+        }
 
 
 
