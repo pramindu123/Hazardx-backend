@@ -24,5 +24,12 @@ namespace Disaster_demo.Controllers
 
             return Ok(officerDetails);
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllDsOfficers()
+        {
+            var officers = await _dsofficerServices.GetAllDsOfficersAsync();
+            return Ok(officers);
+        }
     }
 }

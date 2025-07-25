@@ -39,11 +39,18 @@ namespace Disaster_demo.Controllers
 
 
 
+        //[HttpGet("pending")]
+        //public async Task<IActionResult> GetPendingContributions([FromQuery] string divisional_secretariat)
+        //{
+        //    var pending = await _contributionService.GetPendingContributionsAsync(divisional_secretariat);
+        //    return Ok(pending);
+        //}
+
         [HttpGet("pending")]
-        public async Task<IActionResult> GetPendingContributions([FromQuery] string divisional_secretariat)
+        public async Task<IActionResult> GetPendingContributions(string divisional_secretariat, string? aidCategory = null)
         {
-            var pending = await _contributionService.GetPendingContributionsAsync(divisional_secretariat);
-            return Ok(pending);
+            var contributions = await _contributionService.GetPendingContributionsAsync(divisional_secretariat, aidCategory);
+            return Ok(contributions);
         }
 
 

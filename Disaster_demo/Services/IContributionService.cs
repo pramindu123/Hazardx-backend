@@ -9,7 +9,7 @@ namespace Disaster_demo.Services
         Task<bool> ApproveContributionAsync(int contributionId);
         Task<List<Contribution>> GetContributionsByVolunteerIdAsync(int volunteerId);
         Task<Contribution> GetLatestContributionAsync(int volunteerId);
-        Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat);
+        Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat, string? aidCategory = null);
         Task<int> GetPendingContributionsCountAsync(string divisional_secretariat);
         Task<int> GetTotalContributionsCountAsync(int volunteerId);
         Task<bool> RejectContributionAsync(int contributionId);

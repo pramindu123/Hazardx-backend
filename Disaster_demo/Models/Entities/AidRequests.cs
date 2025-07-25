@@ -17,6 +17,7 @@ namespace Disaster_demo.Models.Entities
         public string contact_no { get; set; }
         public string district { get; set; }
         public string divisional_secretariat { get; set; }
+        public string? nic_number { get; set; }
         public string type_support { get; set; }
         public int family_size { get; set; }
         public string description { get; set; }

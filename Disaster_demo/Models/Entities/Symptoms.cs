@@ -26,9 +26,10 @@ namespace Disaster_demo.Models.Entities
         public string image { get; set; }
 
         public string action { get; set; } = "Pending";
-        public double Latitude { get; set; }  
+        public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public string nic_number { get; set; }
     }
 }
-
 

@@ -35,6 +35,11 @@ namespace Disaster_demo.Services
             };
         }
 
+        public async Task<List<DS_Officer>> GetAllDsOfficersAsync()
+        {
+            return await _dbContext.DS_Officers.ToListAsync();
+        }
+
 
     }
 }

@@ -41,9 +41,46 @@ namespace Disaster_demo.Services
         }
 
 
-        public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat)
+
+        //public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat)
+        //{
+        //    return await _dbContext.Contribution
+        //        .Where(c => c.status == "Pending")
+        //        .Join(
+        //            _dbContext.Volunteers,
+        //            c => c.volunteer_id,
+        //            v => v.user_id,
+        //            (c, v) => new { Contribution = c, Volunteer = v }
+        //        )
+        //        .Join(
+        //            _dbContext.AidRequests,
+        //            cv => cv.Contribution.aid_id,
+        //            a => a.aid_id,
+        //            (cv, a) => new { cv.Contribution, cv.Volunteer, AidRequest = a }
+        //        )
+        //        .Where(x => x.AidRequest.divisional_secretariat == divisional_secretariat)
+        //        .Select(x => new VolunteerContributionDTO
+        //        {
+        //            contribution_id = x.Contribution.contribution_id,
+        //            volunteer_id = x.Volunteer.user_id,
+        //            volunteer_name = x.Volunteer.name,
+        //            volunteer_contact = x.Volunteer.contact_number,
+        //            district = x.Contribution.district,
+        //            type_support = x.Contribution.type_support,
+        //            description = x.Contribution.description,
+        //            image = x.Contribution.image,
+        //            status = x.Contribution.status,
+
+        //            // ✅ NEW: get NIC from AidRequest table
+        //            requester_nic = x.AidRequest.nic_number
+        //        })
+        //        .OrderByDescending(x => x.contribution_id)
+        //        .ToListAsync();
+        //}
+
+        public async Task<List<VolunteerContributionDTO>> GetPendingContributionsAsync(string divisional_secretariat, string? aidCategory = null)
         {
-            return await _dbContext.Contribution
+            var query = _dbContext.Contribution
                 .Where(c => c.status == "Pending")
                 .Join(
                     _dbContext.Volunteers,
@@ -57,7 +94,17 @@ namespace Disaster_demo.Services
                     a => a.aid_id,
                     (cv, a) => new { cv.Contribution, cv.Volunteer, AidRequest = a }
                 )
-                .Where(x => x.AidRequest.divisional_secretariat == divisional_secretariat) // ✅ filter by aid request's division!
+                .Where(x => x.AidRequest.divisional_secretariat == divisional_secretariat);
+
+            if (!string.IsNullOrEmpty(aidCategory))
+            {
+                if (Enum.TryParse<AidRequestType>(aidCategory.Replace(" ", ""), ignoreCase: true, out var parsedType))
+                {
+                    query = query.Where(x => x.AidRequest.request_type == parsedType);
+                }
+            }
+
+            return await query
                 .Select(x => new VolunteerContributionDTO
                 {
                     contribution_id = x.Contribution.contribution_id,
@@ -65,14 +112,17 @@ namespace Disaster_demo.Services
                     volunteer_name = x.Volunteer.name,
                     volunteer_contact = x.Volunteer.contact_number,
                     district = x.Contribution.district,
-                    type_support = x.Contribution.type_support,
+                    AidRequestTypeSupport = x.AidRequest.type_support,
+                    VolunteerTypeSupport = x.Contribution.type_support,
                     description = x.Contribution.description,
                     image = x.Contribution.image,
-                    status = x.Contribution.status
+                    status = x.Contribution.status,
+                    requester_nic = x.AidRequest.nic_number
                 })
                 .OrderByDescending(x => x.contribution_id)
                 .ToListAsync();
         }
+
 
 
 
