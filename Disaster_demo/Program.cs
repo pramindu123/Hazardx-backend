@@ -73,7 +73,10 @@ app.MapGet("/api/health", () => Results.Json(new { Status = "Healthy" }));
 // Controllers
 app.MapControllers();
 
-// ===== START APPLICATION =====
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://0.0.0.0:{port}");
+// ===== START APPLICATION ===== runway
+//var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+//app.Run($"http://0.0.0.0:{port}");
+
+app.Run();
+
 

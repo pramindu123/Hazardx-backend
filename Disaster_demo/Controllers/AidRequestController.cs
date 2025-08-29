@@ -17,17 +17,27 @@ namespace Disaster_demo.Controllers
         }
 
 
+
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateAidRequest([FromBody] AidRequests request)
         {
             bool result = await _aidrequestServices.CreateAidRequestAsync(request);
             if (!result)
-            {
                 return BadRequest("Invalid request type.");
-            }
 
-            return Ok(new { message = "Aid request submitted!" });
+            // Convert UTC to Sri Lanka time
+            TimeZoneInfo sriLankaTZ = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
+            var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(request.date_time, sriLankaTZ);
+
+            return Ok(new
+            {
+                message = "Aid request submitted!",
+                date_time = localDateTime
+            });
         }
+
+
 
 
 

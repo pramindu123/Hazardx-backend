@@ -10,6 +10,8 @@ namespace Disaster_demo.Models.Entities
 
         [Key]
         public int aid_id { get; set; }
+
+        [Column(TypeName = "datetime")]
         public DateTime date_time { get; set; }
         public string full_name { get; set; }
 

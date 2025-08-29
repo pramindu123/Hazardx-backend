@@ -44,24 +44,22 @@ namespace Disaster_demo.Services
         }
 
 
-
-
-
-
-
         public async Task<bool> CreateAidRequestAsync(AidRequests request)
         {
             if (!Enum.IsDefined(typeof(AidRequestType), request.request_type))
-            {
-                return false;  // Invalid enum value
-            }
+                return false;
 
-            request.date_time = DateTime.UtcNow;
+            // Always set Sri Lanka time
+            var sriLankaTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Sri Lanka Standard Time");
+            request.date_time = sriLankaTime;
 
             _dbContext.AidRequests.Add(request);
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+
+
 
 
 
